@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Data Visualization, 10 Ways, D3.js</title>
+	<link href="https://fonts.googleapis.com/css?family=Exo+2|Poiret+One" rel="stylesheet">
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<style type="text/css">
+		body {
+			background-color: #ffffff;
+      		color: #000000;
+      		font-size: large;
+      		font-family: 'Exo 2', sans-serif;
+      		width: auto;
+      		height: auto;
+      		margin-left: auto;
+      		margin-right: auto;
+		}
+		div {
+			background-color: #ffffff;
+      		color: #000000;
+      		font-size: large;
+      		font-family: 'Exo 2', sans-serif;
+      		width: auto;
+      		height: auto;
+      		text-align: center;
+      		margin-left: auto;
+      		margin-right: auto;
+		}
+	</style>
+</head>
+<body>
+<div>
+
+</div>
+<script>
+	console.log(d3);
+
+	d3.csv("cars-sample.csv", function(data) {
+		var sizescale = d3.scaleLinear().domain([1000, 5000]).range([0, 10]);
+		var xscale = d3.scaleLinear().domain([0, 5000]).range([-100, 500]);
+		var yscale = d3.scaleLinear().domain([0, 50]).range([600, 0]);
+		var svg = d3.select("div").append("svg").attr("width", 600).attr("height", 600);
+		var x = d3.axisBottom().scale(xscale).ticks(5);
+		var y = d3.axisLeft().scale(yscale).ticks(5);
+
+		var points = svg.selectAll("circle").data(data);
+		points.enter().append("circle").attr("cx", function(d){return d.Weight=="NA"? -100: xscale(d.Weight);}).attr("cy", function(d){return d.MPG=="NA"? 800: yscale(d.MPG);}).attr("r", function (d) {return d.Weight=="NA"? 0: sizescale(d.Weight);}).attr("fill", function (d) {switch(d.Manufacturer) {case "bmw": return "pink"; case "ford": return "brown"; case "honda": return "green"; case "mercedes": return "blue"; case "toyota": return "purple"; default: return "white"}}).attr("opacity", 0.5);
+		svg.append("g").attr("class", "axis").attr("transform", "translate(0, 500)").call(x);
+		svg.append("g").attr("class", "axis").attr("transform", "translate(80, 0)").call(y);
+		svg.append("text").attr("transform", "translate(260, 550)").text("Weight");
+		svg.append("text").attr("transform", "translate(40, 280)rotate(-90)").text("MPG");
+
+	})
+
+
+
+</script>
+</body>
+</html>
